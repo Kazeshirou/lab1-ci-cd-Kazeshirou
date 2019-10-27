@@ -1,1 +1,1 @@
-## Template for RSOI lab 1 CI/CD
+## RSOI lab 1 CI/CD

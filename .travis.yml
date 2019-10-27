@@ -1,0 +1,24 @@
+language: node_js
+sudo: false
+node_js:
+- 8
+install:
+- npm install
+script:
+- npm run lint
+- npm test
+services:
+- postgresql
+before_script:
+- cd dbscripts
+- psql -c 'create database testtelescopesdb;' -U postgres
+- psql -c 'create user lab1app login password 'lab1app';' -U postgres
+- psql -c 'grant all on database testtelescopesdb to lab1app;' -U postgres
+- cd ..
+deploy:
+  provider: heroku
+  api_key:
+    secure: qSnXWq47wkoRkmccwKDr8yPsnPvPrRFnVQZUf9EpfUZj5pkFx3hGtxdO+gGpu5fD7chuU9dO+LMZNM+z27kM0NKSz2ttMotzyBBFtHthSkSuB0rTUvvu9mvUyCclB10a7E5uK6jYjIaURxLAO93QL28YkFlO2wbb6Fiv4p47YG2uIhvl/Obemw5UVi9OXENa3tTifv8zJJ/2Yk6TccNMT+/6daZAbAZ+Qsd4eehNA20BeseS0zViJ/S37SuNkLP4e5e5rl+a1jXmTWiKa/+aeU2mb9twNGhN4DrxuYj7OKKTfNcBawWrVtDHA4pBPi6CwJVWyHWgD/jaWA/2kXLkF1Ox/jSPCJlQyrWe9h53z3qdHpacQACvO56VetaQgK2BZ1S+ddXIOsE1TYACW8PHNP1FjRxQMW6Pd1hqs4g6QJmsRxmJc+3vnWttkGwtkRmK7xe3rd/0GPCgBCgWZG5XtKPX0VVKQyjd+6KqMXxsupaMTwMdP1tnHvmzzV//U1Vcl6a5TSLOwH1i2mo8IcD2Z+WOV3oTBdzTo0Q6BaqSZ2m3lPBFMzzgNv+TVfHSeSx3rP4J1qdz8VNzipgBucLqUACqLyFqGIx4YBQ3YUcNU/uxglZFtNbnlse/3LbzduNzj2eRKmqDwBUj17b82QYE7HHwAIsHHTUggW69HOfc8XM=
+  app: myrsoiapp
+  on:
+    all_branches: true
