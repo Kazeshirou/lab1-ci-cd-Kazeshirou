@@ -44,6 +44,25 @@ router.post('/', async (req, res, next) => {
         });
 });
 
+router.put('/', async (req, res, next) => {
+    return telescope.updateByName(req.query.name, req.query.type, req.query.country, req.query.city)
+        .then((result) => {
+            if (result.success) {
+                if (result.telescope_num > 0) {
+                    res.status(204).end();
+                } else {
+                    res.status(404).end();
+                }
+            } else {
+                res.status(400).json({'error message' : result.msg});
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            res.status(501).json(err);
+        });
+});
+
 router.delete('/:name', async (req, res, next) => {
     return telescope.deleteByName(req.params.name)
         .then((success) => {

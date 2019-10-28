@@ -16,9 +16,14 @@ async function deleteByName(name) {
     return Telescope.deleteTelescope(name);
 }
 
+async function updateByName(name, type, country, city) {
+    return Telescope.updateTelescope(name, type, country, city);
+}
+
 module.exports = {
     all,
     byName,
     create,
-    deleteByName
+    deleteByName,
+    updateByName
 };

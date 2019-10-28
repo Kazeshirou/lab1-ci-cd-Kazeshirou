@@ -78,8 +78,19 @@ async function deleteTelescope(name) {
         });
 }
 
+async function updateTelescope(name, type, country, city) {
+    return Telescope.update({ type: type, country: country, city: city }, { where: { name: name } })
+        .then((telescope_num) => { 
+            return { success: true, telescope_num: telescope_num };
+        })
+        .catch((err) => {
+            return { success: false, msg: err.original.detail };
+        });
+}
+
 module.exports = {
     createTelescope,
     deleteTelescope,
+    updateTelescope,
     findAll
 };

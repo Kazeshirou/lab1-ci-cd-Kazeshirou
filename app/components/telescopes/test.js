@@ -89,6 +89,25 @@ describe('Telescopes', () => {
         });
     });
 
+    describe('/put telescopes', () => {
+        it('it should update telescope', (done) => {
+            chai.request(server)
+                .put('/?name=tel1&type=type2&country=country2&city=city2')
+                .end((err, res) => {
+                    res.should.have.status(204);
+                    done();
+                });
+        });
+        it('it should not update telescope', (done) => {
+            chai.request(server)
+                .put('/?name=tel2&type=type2&country=country2&city=city2')
+                .end((err, res) => {
+                    res.should.have.status(404);
+                    done();
+                });
+        });
+    });    
+
     describe('/DELETE telescopes', () => {
         it('it should delete telescope', (done) => {
             chai.request(server)
