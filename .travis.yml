@@ -11,7 +11,7 @@ services:
 - postgresql
 before_script:
 - psql -c 'create database testtelescopesdb;' -U postgres
-- psql -c 'create user lab1app login password "lab1app";' -U postgres
+- psql -c "create user lab1app login password 'lab1app';" -U postgres
 - psql -c 'grant all on database testtelescopesdb to lab1app;' -U postgres
 deploy:
   provider: heroku
