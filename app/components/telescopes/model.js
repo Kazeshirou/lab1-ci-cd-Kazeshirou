@@ -31,34 +31,51 @@ Telescope.init({
 }, { sequelize : db, timestamps : true, modelName : "Telescope" });
 
 async function createTelescope(name, type, country, city) {
-    console.log('create model ', name);
     return Telescope.create({name: name, type: type, country: country, city: city})
-                .then((telescope) => { return telescope });
+        .then((telescope) => { 
+            return { success: true, telescope: telescope };
+        })
+        .catch((err) => {
+            return { success: false, msg: err.original.detail };
+        });
 }
 
 async function findAll(name) {
-    console.log('model find all name ', name);
     if (name) {
         return Telescope.findAll({
             where: {
                 name: name
             }
         })
-            .then((telescopes) => {return telescopes[0]});
+            .then((telescopes) => {
+                if (telescopes.length == 1) {
+                    return { 
+                        success: true, 
+                        telescope: telescopes[0]
+                    };
+                } else {
+                    return { success: false };
+                } 
+            })
     } else {
         return Telescope.findAll()
-            .then((telescopes) => {return telescopes});
+            .then((telescopes) => { return telescopes; });
     }
 }
 
 async function deleteTelescope(name) {
-    console.log('delete model ', name);
     return Telescope.destroy({
         where: {
             name: name
         }
     })
-        .then((telescope) => { return telescope });
+        .then((telescope) => { 
+            if (telescope > 0) {
+                return { success: true };
+            } else {
+                return { success: false };
+            }
+        });
 }
 
 module.exports = {

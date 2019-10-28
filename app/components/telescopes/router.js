@@ -6,50 +6,56 @@ var telescope = require('./');
 router.get('/', async (req, res, next) => {
     return telescope.all()
         .then((telescopes) => {
-            console.log('get telescopes ', telescopes)
             res.json({ 'telescopes': telescopes });
         })
         .catch((err) => {
-            console.log("telescope get err: ", err);
-            next(err);
+            console.log(err);
+            res.status(501).json(err);
         });
 });
 
 router.get('/:name', async (req, res, next) => {
-    console.log('req.param', req.params);
     return telescope.byName(req.params.name)
-        .then((telescope) => {
-            console.log('get telescope by name ', telescope)
-            res.json({ 'telescope': telescope });
+        .then((result) => {
+            if (result.success) {
+                res.json({ 'telescope': result.telescope });
+            } else {
+                res.status(404).end();
+            }
         })
         .catch((err) => {
-            console.log("telescope get by name err: ", err);
-            next(err);
+            console.log(err);
+            res.status(501).json(err);
         });
 });
 
 router.post('/', async (req, res, next) => {
     return telescope.create(req.query.name, req.query.type, req.query.country, req.query.city)
-        .then((telescope) => {
-            console.log('put telescope ', telescope);
-            res.json({ 'telescope': telescope });
+        .then((result) => {
+            if (result.success) {
+                res.status(201).json({ 'telescope': result.telescope });
+            } else {
+                res.status(400).json({'error message' : result.msg});
+            }
         })
         .catch((err) => {
-            console.log("telescope put err: ", err);
-            next(err);
+            console.log(err);
+            res.status(501).json(err);
         });
 });
 
 router.delete('/:name', async (req, res, next) => {
-    console.log('req.param', req.params);
     return telescope.deleteByName(req.params.name)
-        .then((telescope) => {
-            console.log('get telescope by name ', telescope)
-            res.json({ 'number of destroied telescopes': telescope });
+        .then((success) => {
+            if (success.success) {
+                res.status(204).end();
+            } else {
+                res.status(404).end();
+            }
         })
         .catch((err) => {
-            console.log("telescope delete by name err: ", err);
-            next(err);
+            console.log(err);
+            res.status(501).json(err);
         });
 });
 
